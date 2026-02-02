@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Fake Data Filler</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { width: 100%; }
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: system-ui, -apple-system, sans-serif;
+      min-width: 380px;
+      background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+      color: #e2e8f0;
+    }
+    h1 {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 0 0 14px 0;
+      color: #f8fafc;
+    }
+    .card {
+      background: rgba(255,255,255,.06);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    label { font-size: 13px; cursor: pointer; }
+    .toggle {
+      width: 40px; height: 22px;
+      background: #475569;
+      border-radius: 11px;
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .toggle.on { background: #0ea5e9; }
+    .toggle::after {
+      content: "";
+      position: absolute;
+      width: 18px; height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      top: 2px; left: 2px;
+      transition: transform .2s;
+    }
+    .toggle.on::after { transform: translateX(18px); }
+    #fillBtn {
+      width: 100%;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    #fillBtn:hover { opacity: .95; }
+    .hint { font-size: 11px; color: #94a3b8; margin-top: 8px; }
+    kbd { padding: 2px 6px; background: rgba(255,255,255,.1); border-radius: 4px; font-size: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Fake Data Filler</h1>
+  <p class="hint" style="margin:0 0 12px 0">Open a page with a form, then click the button below or use the keyboard shortcut to fill it with fake data.</p>
+  <div class="card">
+    <div class="row">
+      <label for="shortcutToggle">Keyboard shortcut (Ctrl+Shift+V+V)</label>
+      <div id="shortcutToggle" class="toggle on" role="switch" aria-checked="true"></div>
+    </div>
+    <p class="hint">Double-tap V with Ctrl+Shift to fill form on page</p>
+  </div>
+  <button id="fillBtn">Fill Form with Fake Data</button>
+  <p class="hint" style="margin-top:8px">Or press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> twice on the page.</p>
+  <a id="settingsLink" href="#" style="display:block;margin-top:10px;font-size:12px;color:#94a3b8;text-decoration:none;">Settings</a>
+  <script src="popup.js"></script>
+</body>
+</html>
