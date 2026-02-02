@@ -1,2 +1,7 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Exclude packaging artifacts
+*.zip export-ignore
+Chrome-Extension/*.zip export-ignore
+Mozile-Extension/*.zip export-ignore

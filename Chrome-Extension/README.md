@@ -1,6 +1,6 @@
 # AutoForm Fill – Fake Data Generator
 
-Browser extension that fills web forms with realistic fake data. Available for Chrome and Firefox.
+Chrome extension that fills web forms with realistic fake data. Supports HTML, React, Vue, Angular, Next.js, and Express-style forms.
 
 ## Features
 
@@ -15,22 +15,15 @@ Browser extension that fills web forms with realistic fake data. Available for C
 
 ## Installation
 
-### Chrome
-1. Go to `chrome://extensions`
+1. Chrome → `chrome://extensions`
 2. Turn on **Developer mode**
-3. **Load unpacked** → select `Chrome-Extension` folder
-
-### Firefox
-1. Go to `about:debugging#/runtime/this-firefox`
-2. **Load Temporary Add-on** → select `manifest.json` from `Mozile-Extension` folder
-
-Or download from [Firefox Add-ons (AMO)](https://addons.mozilla.org)
+3. **Load unpacked** → select this folder
 
 ## Usage
 
-1. Open any page with a form
-2. **Fill:** Click the extension icon → "Fill Form", or use shortcut `Ctrl+Shift+V` then `V` again
-3. **Settings:** Right-click extension → Options (or open from popup)
+1. Open any page with a form.
+2. **Fill:** Click the extension icon → “Fill Form”, or use shortcut `Ctrl+Shift+V` then `V` again.
+3. **Settings:** Right-click extension → Options (or open from popup).
 
 ## Options (Settings)
 
@@ -38,17 +31,11 @@ Or download from [Firefox Add-ons (AMO)](https://addons.mozilla.org)
 - **Field types:** Enable/disable filling for each type (name, email, phone, file, etc.)
 - **Custom rules:** Add rules like `nickname` [fixed] → Name, `+8801878578504` [fixed] → Phone (exact number), or regex patterns
 
-## Project Structure
+## Important Notes
 
-```
-├── Chrome-Extension/   # Chrome (Manifest V3)
-├── Mozile-Extension/   # Firefox (Manifest V2)
-```
+- **File upload:** Enable “File Upload” in Field types. Upload your own image/PDF/doc in Options → Custom Files to use those instead of demo files.
+- **Custom rules:** Fixed value (e.g. a phone number) fills that exact value; text patterns match field name/label/placeholder and use the chosen fill type.
 
 ## Publishing
 
-### Chrome Web Store
-Package `Chrome-Extension` folder (exclude dev files) and upload to Chrome Web Store.
-
-### Firefox Add-ons (AMO)
-Package `Mozile-Extension` folder and submit to addons.mozilla.org. Includes required `data_collection_permissions` for AMO compliance.
+Package the extension and upload to the Chrome Web Store (e.g. zip excluding dev files).

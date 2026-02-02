@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Settings · Fake Data Filler</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0c0f14;
+      --surface: rgba(30, 35, 45, 0.7);
+      --surface-hover: rgba(40, 48, 62, 0.8);
+      --border: rgba(255,255,255,.06);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #22d3ee;
+      --accent-dim: rgba(34, 211, 238, .15);
+      --success: #34d399;
+      --danger: #f87171;
+      --danger-bg: rgba(248,113,113,.12);
+      --radius: 14px;
+      --radius-sm: 10px;
+      --shadow: 0 4px 24px rgba(0,0,0,.25);
+      --transition: .2s ease;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { min-width: 720px; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-width: 720px;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    .app {
+      max-width: 960px;
+      min-width: 640px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+      width: 100%;
+    }
+    .hero {
+      text-align: center;
+      margin-bottom: 32px;
+      padding: 24px 0;
+    }
+    .hero h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p { margin: 0; font-size: .9375rem; color: var(--text-muted); }
+
+    .tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 6px;
+      margin-bottom: 24px;
+      padding: 6px;
+      background: var(--surface);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+    .tab {
+      flex: 1;
+      flex-shrink: 0;
+      white-space: nowrap;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: transparent;
+      cursor: pointer;
+      transition: color var(--transition), background var(--transition);
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active { color: var(--accent); background: var(--accent-dim); }
+    .panel { display: none; animation: fadeIn .3s ease; }
+    .panel.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+    }
+    .card-title {
+      font-size: .8125rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text-muted);
+      margin: 0 0 20px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-title .icon { width: 20px; height: 20px; opacity: .8; }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .setting-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .setting-row:first-child { padding-top: 0; }
+    .setting-label { font-size: .9375rem; font-weight: 500; cursor: pointer; user-select: none; flex: 1; }
+    .setting-hint { font-size: .8125rem; color: var(--text-muted); margin: 10px 0 0 0; line-height: 1.45; }
+    kbd { padding: 3px 8px; background: rgba(255,255,255,.08); border-radius: 6px; font-size: .75rem; font-family: inherit; }
+
+    .switch {
+      width: 48px; height: 26px;
+      background: rgba(255,255,255,.1);
+      border-radius: 13px;
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background var(--transition);
+      border: 1px solid var(--border);
+    }
+    .switch:hover { background: rgba(255,255,255,.15); }
+    .switch.on { background: var(--accent); border-color: var(--accent); }
+    .switch::after {
+      content: "";
+      position: absolute;
+      width: 22px; height: 22px;
+      background: #fff;
+      border-radius: 50%;
+      top: 1px; left: 1px;
+      transition: transform var(--transition);
+      box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    }
+    .switch.on::after { transform: translateX(22px); }
+
+    .field-actions {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .field-actions .btn-sm {
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: .8125rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--surface-hover);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all var(--transition);
+    }
+    .field-actions .btn-sm:hover { color: var(--text); border-color: rgba(255,255,255,.12); }
+    .field-count { font-size: .8125rem; color: var(--text-muted); align-self: center; margin-left: auto; }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 10px;
+    }
+    .field-chip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .field-chip:hover { background: rgba(255,255,255,.06); }
+    .field-chip .label { font-size: .875rem; font-weight: 500; }
+    .field-chip .switch { width: 40px; height: 22px; }
+    .field-chip .switch::after { width: 18px; height: 18px; }
+    .field-chip .switch.on::after { transform: translateX(18px); }
+
+    .rules-empty {
+      text-align: center;
+      padding: 40px 24px;
+      background: rgba(255,255,255,.02);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 20px;
+    }
+    .rules-empty .illus { font-size: 2.5rem; margin-bottom: 12px; opacity: .5; }
+    .rules-empty p { margin: 0; font-size: .9375rem; color: var(--text-muted); }
+    .rules-empty .hint { font-size: .8125rem; margin-top: 6px; }
+
+    .add-rule-form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .add-rule-form input,
+    .add-rule-form select {
+      padding: 12px 14px;
+      background: rgba(0,0,0,.25);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: .875rem;
+      font-family: inherit;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .add-rule-form input { flex: 1; min-width: 140px; }
+    .add-rule-form input::placeholder { color: var(--text-muted); opacity: .8; }
+    .add-rule-form input:focus,
+    .add-rule-form select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-dim);
+    }
+    .add-rule-form select { min-width: 140px; cursor: pointer; }
+
+    .btn {
+      padding: 12px 20px;
+      border-radius: var(--radius-sm);
+      font-size: .875rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: transform .05s, opacity var(--transition);
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--accent); color: #0c0f14; }
+    .btn-primary:hover { opacity: .92; }
+    .btn-ghost { background: transparent; color: var(--text-muted); }
+    .btn-ghost:hover { color: var(--text); }
+    .btn-danger { padding: 8px 14px; font-size: .8125rem; background: var(--danger-bg); color: var(--danger); border-radius: 8px; }
+    .btn-danger:hover { background: rgba(248,113,113,.2); }
+
+    .rule-list { display: flex; flex-direction: column; gap: 8px; }
+    .rule-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: rgba(0,0,0,.2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: .875rem;
+      transition: border-color var(--transition);
+    }
+    .rule-item:hover { border-color: rgba(255,255,255,.1); }
+    .rule-item .pattern { flex: 1; word-break: break-all; color: var(--text); }
+    .rule-item .arrow { color: var(--text-muted); font-size: .75rem; }
+    .rule-item .fillType { color: var(--accent); font-weight: 500; min-width: 70px; }
+
+    .footer-actions { text-align: center; padding-top: 16px; }
+    .footer-actions .btn { font-size: .8125rem; }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 24px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: var(--shadow);
+    }
+    .modal h3 { margin: 0 0 12px 0; font-size: 1.125rem; }
+    .modal p { margin: 0 0 24px 0; font-size: .9375rem; color: var(--text-muted); line-height: 1.5; }
+    .modal-actions { display: flex; gap: 12px; justify-content: flex-end; }
+    .modal-actions .btn { min-width: 80px; }
+
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      padding: 14px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: .875rem;
+      font-weight: 500;
+      color: var(--text);
+      opacity: 0;
+      transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .25s;
+      z-index: 200;
+      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .toast .check { color: var(--success); font-size: 1.125rem; }
+
+    code { font-size: .8125rem; padding: 2px 6px; background: rgba(255,255,255,.06); border-radius: 4px; }
+    .support-msg { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; padding: 14px; background: rgba(0,0,0,.2); border-radius: var(--radius-sm); border-left: 3px solid var(--accent); }
+    .support-msg p { margin: 0; }
+    .support-msg strong { color: var(--text); }
+    @media (max-width: 640px) {
+      html, body { min-width: 0; }
+      .app { min-width: 0; padding: 24px 16px 40px; }
+      .field-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <h1>Fake Data Filler</h1>
+      <p>Fill forms with realistic fake data. Control every detail here.</p>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button type="button" class="tab active" role="tab" aria-selected="true" data-panel="general">General</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" data-panel="fields">Field types</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" data-panel="rules">Custom rules</button>
+    </nav>
+
+    <section id="panel-general" class="panel active" role="tabpanel">
+      <p class="support-msg" style="margin-top:0">Use these options to turn the fill shortcut on or off. When enabled, you can press <strong>Ctrl+Shift+V</strong> twice on any page to fill the form.</p>
+      <div class="card">
+        <h2 class="card-title">
+          <span class="icon" aria-hidden="true">⌨️</span>
+          Keyboard shortcut
+        </h2>
+        <div class="setting-row">
+          <label for="shortcutToggle" class="setting-label">Use double-tap shortcut on pages</label>
+          <div id="shortcutToggle" class="switch on" role="switch" aria-checked="true" tabindex="0"></div>
+        </div>
+        <p class="setting-hint">Press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd> twice quickly on any page to fill the form. You can also use the extension icon.</p>
+        <div class="setting-row" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+          <label for="phoneFormat" class="setting-label">Phone number format (Bangladesh)</label>
+          <select id="phoneFormat" aria-label="Phone format" style="padding:8px 12px;background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px">
+            <option value="local">Local (01XXXXXXXXX)</option>
+            <option value="international">International (+8801XXXXXXXXX)</option>
+          </select>
+        </div>
+        <p class="setting-hint" style="margin-top:6px">Default is Bangladeshi local. Change here to use +88 format.</p>
+      </div>
+      <div class="card" style="margin-top:20px">
+        <h2 class="card-title">
+          <span class="icon" aria-hidden="true">📎</span>
+          Custom Files
+        </h2>
+        <p class="setting-hint" style="margin-top:0;margin-bottom:16px">Upload your own files to use for auto-fill. If not set, random demo files are generated.</p>
+        <div class="setting-row">
+          <label for="customImage" class="setting-label">Image file (.jpg, .png)</label>
+          <input type="file" id="customImage" accept="image/*" style="font-size:13px;max-width:280px">
+        </div>
+        <div class="setting-row" style="margin-top:12px">
+          <label for="customPdf" class="setting-label">PDF file (.pdf)</label>
+          <input type="file" id="customPdf" accept=".pdf" style="font-size:13px;max-width:280px">
+        </div>
+        <div class="setting-row" style="margin-top:12px">
+          <label for="customDoc" class="setting-label">Document (.doc, .docx)</label>
+          <input type="file" id="customDoc" accept=".doc,.docx" style="font-size:13px;max-width:280px">
+        </div>
+        <div id="customFilesStatus" style="margin-top:12px;font-size:12px;color:var(--text-muted)"></div>
+        <button type="button" id="clearCustomFiles" class="btn-sm" style="margin-top:12px">Clear all custom files</button>
+      </div>
+    </section>
+
+    <section id="panel-fields" class="panel" role="tabpanel">
+      <p class="support-msg" style="margin-top:0">Choose which <strong>field types</strong> the extension is allowed to fill. Turn off any type you want to leave empty (e.g. turn off Password to never fill password fields). Use <strong>Enable all</strong> or <strong>Disable all</strong> to reset quickly. Custom rules (next tab) can still override per field.</p>
+      <div class="card">
+        <h2 class="card-title">
+          <span class="icon" aria-hidden="true">📋</span>
+          Which fields to fill
+        </h2>
+        <p class="setting-hint" style="margin-top:0;margin-bottom:16px">Toggle each type on or off. The counter shows how many are enabled.</p>
+        <div class="field-actions">
+          <button type="button" id="enableAll" class="btn-sm">Enable all</button>
+          <button type="button" id="disableAll" class="btn-sm">Disable all</button>
+          <span id="fieldCount" class="field-count">14 / 14 on</span>
+        </div>
+        <div class="field-grid" id="fieldGrid">
+          <div class="field-chip"><span class="label" id="l_name">Name</span><div id="t_name" class="switch on" role="switch" tabindex="0"></div></div>
+          <div class="field-chip"><span class="label" id="l_email">Email</span><div id="t_email" class="switch on" role="switch" tabindex="0"></div></div>
+          <div class="field-chip"><span class="label" id="l_phone">Phone</span><div id="t_phone" class="switch on" role="switch" tabindex="0"></div></div>
+          <div class="field-chip"><span class="label" id="l_address">Address</span><div id="t_address" class="switch on" role="switch" tabindex="0"></div></div>
+          <div class="field-chip"><span class="label" id="l_company">Company</span><div id="t_company" class="switch on" role="switch" tabindex="0"></div></div>
+          <div class="field-chip"><span class="label" id="l_date">Date / Time</span><div id="t_date" class="switch on" role="switch" tabindex="0"></div></div>
+          <div class="field-chip"><span class="label" id="l_checkbox">Checkboxes</span><div id="t_checkbox" class="switch on" role="switch" tabindex="0"></div></div>
+          <div class="field-chip"><span class="label" id="l_radio">Radio buttons</span><div id="t_radio" class="switch on" role="switch" tabindex="0"></div></div>
+          <div class="field-chip"><span class="label" id="l_select">Dropdowns</span><div id="t_select" class="switch on" role="switch" tabindex="0"></div></div>
+          <div class="field-chip"><span class="label" id="l_textarea">Textarea</span><div id="t_textarea" class="switch on" role="switch" tabindex="0"></div></div>
+          <div class="field-chip"><span class="label" id="l_number">Number / Age</span><div id="t_number" class="switch on" role="switch" tabindex="0"></div></div>
+          <div class="field-chip"><span class="label" id="l_password">Password</span><div id="t_password" class="switch on" role="switch" tabindex="0"></div></div>
+          <div class="field-chip"><span class="label" id="l_url">URL</span><div id="t_url" class="switch on" role="switch" tabindex="0"></div></div>
+          <div class="field-chip"><span class="label" id="l_nid">NID / ID</span><div id="t_nid" class="switch on" role="switch" tabindex="0"></div></div>
+          <div class="field-chip"><span class="label" id="l_file">File Upload</span><div id="t_file" class="switch on" role="switch" tabindex="0"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="panel-rules" class="panel" role="tabpanel">
+      <div class="card">
+        <h2 class="card-title">
+          <span class="icon" aria-hidden="true">✨</span>
+          Custom rules
+        </h2>
+        <div class="support-msg" role="status">
+          <p><strong>What to do:</strong> Add rules below so the extension knows how to fill fields that don't match the default types. Each rule has a <strong>pattern</strong> (text or regex to match the field's name, placeholder, or label) and a <strong>fill type</strong> (what fake data to use, or Skip). Rules are checked in order; the first match is used.</p>
+          <p style="margin-top:8px"><strong>Fixed</strong> = match fields that contain your text (e.g. <code>nickname</code>). <strong>Regex</strong> = use a regular expression (e.g. <code>my_.*field</code>). Check the Regex box when your pattern is regex.</p>
+        </div>
+        <div id="rulesList" class="rule-list"></div>
+        <div class="add-rule-form" style="margin-top:16px">
+          <input type="text" id="rulePattern" placeholder="Pattern: e.g. nickname (fixed) or my_.*field (regex)" maxlength="200" aria-label="Pattern to match field" title="Enter text or regex. Match is against field name, placeholder, label." />
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);white-space:nowrap"><input type="checkbox" id="ruleRegex" aria-label="Use regex" title="Check if pattern is a regular expression" /> Regex</label>
+          <select id="ruleType" aria-label="Fill type" title="What kind of fake data to fill, or Skip">
+            <option value="name">Name</option>
+            <option value="email">Email</option>
+            <option value="phone">Phone</option>
+            <option value="address">Address</option>
+            <option value="company">Company</option>
+            <option value="date">Date</option>
+            <option value="number">Number</option>
+            <option value="password">Password</option>
+            <option value="url">URL</option>
+            <option value="textarea">Textarea</option>
+            <option value="nid">NID</option>
+            <option value="skip">Skip (don't fill)</option>
+          </select>
+          <button type="button" id="addRule" class="btn btn-primary">Add rule</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-actions">
+      <button type="button" id="resetBtn" class="btn btn-ghost">Reset all to defaults</button>
+    </div>
+  </div>
+
+  <div id="modalOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal">
+      <h3 id="modalTitle">Reset settings?</h3>
+      <p>All field toggles will be turned on, custom rules will be removed, and the keyboard shortcut will be enabled. This can't be undone.</p>
+      <div class="modal-actions">
+        <button type="button" id="modalCancel" class="btn btn-ghost">Cancel</button>
+        <button type="button" id="modalConfirm" class="btn btn-primary">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" aria-live="polite" role="status">
+    <span class="check" aria-hidden="true">✓</span>
+    <span id="toastMessage">Saved</span>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
