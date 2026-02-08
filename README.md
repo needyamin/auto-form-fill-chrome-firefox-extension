@@ -24,7 +24,7 @@ Browser extension that fills web forms with realistic fake data. Available for C
 1. Go to `about:debugging#/runtime/this-firefox`
 2. **Load Temporary Add-on** → select `manifest.json` from `Mozile-Extension` folder
 
-Or download from [Firefox Add-ons (AMO)](https://addons.mozilla.org)
+Or download from [Firefox Add-ons (AMO)](https://addons.mozilla.org/en-US/firefox/addon/auto-fill-fake-data-generator/)
 
 ## Usage
 
